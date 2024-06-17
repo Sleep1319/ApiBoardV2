@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="nav">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">UngBoard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item" th:if="${session.userInfo == null}">
+                        <a class="nav-link active" aria-current="page" href="/sign-in">로그인</a>
+                    </li>
+                    <li class="nav-item" th:if="${session.userInfo == null}">
+                        <a class="nav-link" href="/sign-up">회원가입</a>
+                    </li>
+                    <li class="nav-item" th:if="${session.userInfo != null}">
+                        <a class="nav-link" href="/sign-out">로그아웃</a>
+                    </li>
+                </ul>
+                <div th:if="${session.userInfo != null}">
+                    <span th:text="'사용자: ' + ${session.userInfo.getNickname()}" class="navbar-text"></span>
+                    <span th:text="'등급: ' + ${session.userInfo.getRoleName()}" class="navbar-text"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+</html>

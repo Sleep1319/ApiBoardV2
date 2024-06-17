@@ -1,0 +1,147 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header :: head">
+    <meta charset="UTF-8">
+    <title th:value="${board.getTitle()}"></title>
+</head>
+<body>
+<div th:replace="layout/navbar :: nav"></div>
+
+<div id="boardForm" th:if="${board != null}">
+
+    <div class="card">
+        <div class="card-header" style="background-color: transparent;">
+            [[${board.getTitle()}]]
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <textarea aria-label="With textarea" class="form-control" id="updateContent" name="content" readonly
+                          rows="10" style="background-color: transparent;">[[${board.getContent()}]]
+        </textarea>
+            </div>
+
+            <input class="form-control" id="boardId" name="boardId" readonly th:value="${board.getId()}" type="hidden">
+
+            <div class="mb-3">
+                <label class="form-label" for="nickname">작성자 닉네임</label>
+                <input class="form-control" id="nickname" name="nickname" readonly
+                       th:value="${board.getMember().getNickname()}" type="text">
+            </div>
+            <div th:if="${session.userInfo != null && session.userInfo.getId().equals(board.getMember().getId())}">
+                <button class="btn btn-info" id="readOnlyButton" type="button">수정</button>
+                <button class="btn btn-primary" onclick="updateBoard()" style="display: none" type="button">확인
+                </button>
+                <button class="btn btn-primary" onclick="resetPage()" style="display: none" type="button">취소
+                </button>
+                <button class="btn btn-danger" onclick="deleteBoard()" style="display: none" type="button">삭제
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Leave a Comment
+        </div>
+
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Comments
+        </div>
+        <div class="card-body">
+                작성된 댓글이 없습니다
+            </div>
+        </div>
+    </div>
+    <div th:if="${board == null}">
+        게시글을 찾을 수 없습니다.
+    </div>
+</div>
+<a href="/">메인 이동</a>
+</body>
+<script>
+    var readOnlyButton = document.getElementById('readOnlyButton');
+    var hiddenButtons = document.getElementsByClassName('btn btn-primary');
+    var hiddenDeleteButton = document.getElementsByClassName('btn btn-danger')[0];
+    var updateTitle = document.getElementById('updateTitle');
+    var updateContent = document.getElementById("updateContent");
+    var commentDeleteButton = document.getElementsByClassName('btn btn-warning')[0];
+
+    readOnlyButton.addEventListener('click', function () {
+        // updateTitle.readOnly = false
+        updateContent.readOnly = false;
+        readOnlyButton.style.display = 'none';
+
+        hiddenDeleteButton.style.display = 'inline';
+
+        for (var j = 0; j < hiddenButtons.length; j++) {
+            hiddenButtons[j].style.display = 'inline';
+        }
+    });
+
+    function resetPage() {
+        location.reload();
+    }
+
+    function updateBoard() {
+        var formData = {
+            memberId: [[${session.userInfo?.id}]],
+            boardId: document.getElementById("boardForm").querySelector('input[name="boardId"]').value,
+            // title: document.getElementById("boardForm").querySelector('input[name="title"]').value,
+            content: document.getElementById("boardForm").querySelector('textarea[name="content"]').value
+        };
+        fetch("/api/board/edit", {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(function (response) {
+                if (response.ok) {
+                    alert("수정 성공")
+                    window.location.reload();
+                } else {
+                    response.text()
+                        .then(function (message) {
+                            alert("수정 실패" + message)
+                        });
+                }
+            })
+            .catch(function (error) {
+                alert("요청 에러 발생")
+            });
+    }
+
+    function deleteBoard() {
+        var formData = {
+            memberId: [[${session.userInfo?.id}]],
+            boardId: document.getElementById("boardForm").querySelector('input[name="boardId"]').value
+        };
+
+        fetch("/api/board/delete", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(function (response) {
+                if (response.ok) {
+                    alert("삭제 성공")
+                    window.location.href = "/";
+                } else {
+                    response.text()
+                        .then(function (message) {
+                            alert("삭제실패: " + message)
+                        });
+                }
+            })
+            .catch(function (error) {
+                alert("요청 에러 발생")
+            });
+    }
+
+</script>
+</html>

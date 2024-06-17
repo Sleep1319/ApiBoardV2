@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header :: head">
+    <meta charset="UTF-8">
+    <title>UngBoardMain</title>
+</head>
+<body>
+<div th:replace="layout/navbar :: nav"></div>
+
+<a href="/board/new">
+    <button>글쓰기</button>
+</a>
+</div>
+
+<div th:if="${!boardList.isEmpty()}">
+    <table class="table table-striped">
+        <tr>
+            <td>게시글 번호</td>
+            <td>제목</td>
+            <td>작성자</td>
+            <td></td>
+        </tr>
+        <tr th:each=" board : ${boardList}">
+            <td th:text="${board.getId()}"></td>
+            <td th:text="${board.getTitle()}"></td>
+            <td th:text="${board.getMember().getNickname()}"></td>
+            <td><a th:href="'/board/show/' + ${board.getId()}">
+                <button class="btn btn-primary" type="button">이동</button>
+            </a></td>
+        </tr>
+    </table>
+
+    <hr>
+</div>
+<div th:if="${boardList.isEmpty()}">
+    게시글이 없습니다
+</div>
+
+</body>
+<script>
+    var message = "[[${message}]]";
+    if (message !== null && message !== "") {
+        alert(message);
+    }
+</script>
+</html>

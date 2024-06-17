@@ -1,0 +1,29 @@
+server:
+  port: 8083
+
+spring:
+  datasource:
+    driver-class-name: "com.mysql.cj.jdbc.Driver"
+    url: jdbc:mysql://localhost:3306/ Apiboard2?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: Sleep1205!
+
+  thymeleaf:
+    cache: false
+
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 30MB
+      file-size-threshold: 0
+      enabled: true
+      location: C:\Users\cjsdn\JpaIntelliJ\ApiBoard ApiboardV2\src\main\resources\static\images
+
+  messages:
+    basename: i18n/exception,i18n/validation

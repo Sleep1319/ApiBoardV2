@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header :: head">
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+</head>
+<body>
+<div th:replace="layout/navbar :: nav"></div>
+
+    <div id="signUpForm">
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">이메일</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" name="email">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">비밀번호</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" name="password"  aria-describedby="passwordHelp">
+            <div id="passwordHelp" class="form-text">알파벳, 숫자, 특수 기호를 쓰십시오</div>
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputUsername" class="form-label">이름</label>
+            <input type="email" class="form-control" id="exampleInputUsername" name="username">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputNickname" class="form-label">닉네임</label>
+            <input type="email" class="form-control" id="exampleInputNickname" name="nickname">
+        </div>
+        <button type="button" onclick="submitForm()">가입</button>
+        <button type="reset">다시</button>
+    </div>
+    <a href="/">메인으로 이동</a>
+</body>
+<script>
+    var message = "[[${message}]]";
+    if(message !== null && message !== "") {
+        alert(message);
+    }
+
+    function submitForm() {
+        var formData = {
+            email: document.getElementById("signUpForm").querySelector('input[name="email"]').value,
+            password: document.getElementById("signUpForm").querySelector('input[name="password"]').value,
+            username: document.getElementById("signUpForm").querySelector('input[name="username"]').value,
+            nickname: document.getElementById("signUpForm").querySelector('input[name="nickname"]').value
+        };
+
+        fetch("/api/sign-up", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(function(response) {
+                if (response.ok) {
+                    alert("가입 성공")
+                    window.location.href = "/sign-in";
+                } else {
+                    response.text()
+                        .then(function (message) {
+                            alert("가입 실패, " + message);
+                        })
+                }
+            })
+            .catch(function(error) {
+                alert("일단 실행은 되는데 에러");
+            });
+    }
+</script>
+</html>
