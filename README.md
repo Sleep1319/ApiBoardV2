@@ -1,7 +1,7 @@
 <img src="https://capsule-render.vercel.app/api?type=wave&color=auto&height=200&section=header&width=1000&text=BoardV2%20&fontSize=90" />
 <div>  
   <h3>개발 목적</h3>
-  jdbd 이용 및 프로시저 공부
+  jdbd 이용 및 프로시저 공부 (미완성)
   <h3>사용 언어</h3>
   <img src="https://img.shields.io/badge/Java-FF7800?style=flat&logo=Java&logoColor=white"/>
   <img src="https://img.shields.io/badge/Javascript-F7DF1E?style=flat&logo=Javascript&logoColor=white"/>
