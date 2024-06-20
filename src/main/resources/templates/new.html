@@ -7,7 +7,7 @@
 <body>
 <div th:replace="layout/navbar :: nav"></div>
 
-<form id="createBoardForm" method="post" action="/board/new" enctype="multipart/form-data">
+<form id="createBoardForm" method="post" action="/api/board/new" enctype="multipart/form-data">
     <input type="hidden" name="memberId" th:value="${session.userInfo.id}">
     <div class="mb-3">
         <label for="createTitle" class="form-label">제목</label>
@@ -16,10 +16,6 @@
     <div class="mb-3">
         <label for="createTitle" class="form-label">내용</label>
         <textarea class="form-control" id="createContent" name="content" rows="10" aria-label="With textarea"></textarea>
-    </div>
-    <div>
-        <label for="uploadFiles" class="form-label">이미지</label>
-        <input type="file" class="form-control" id="uploadFiles" name="files">
     </div>
     <button type="submit" class="btn btn-primary" >작성</button>
 </form>

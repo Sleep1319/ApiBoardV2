@@ -1,8 +1,10 @@
 package com.ung.apiboardv2.apiboardv2.domain.member;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class Member {
     private int id;
 
@@ -14,11 +16,4 @@ public class Member {
 
     private String nickname;
 
-    public Member(int id, String email, String password, String username, String nickname) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.username = username;
-        this.nickname = nickname;
-    }
 }

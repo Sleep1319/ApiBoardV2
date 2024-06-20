@@ -23,7 +23,7 @@
         <tr th:each=" board : ${boardList}">
             <td th:text="${board.getId()}"></td>
             <td th:text="${board.getTitle()}"></td>
-            <td th:text="${board.getMember().getNickname()}"></td>
+            <td th:text="${board.getNickname()}"></td>
             <td><a th:href="'/board/show/' + ${board.getId()}">
                 <button class="btn btn-primary" type="button">이동</button>
             </a></td>

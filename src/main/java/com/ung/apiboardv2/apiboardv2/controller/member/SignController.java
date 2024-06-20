@@ -25,9 +25,31 @@ public class SignController {
     @PostMapping("/api/sign-up")
     public ResponseEntity<String> signUp(@Valid @RequestBody SignUpRequest req) {
         String message = null;
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+
+        try {
+            validateSingUpInfo(req);
+        } catch (MemberEmailAlreadyExistsException e) {
+            message = "중복된 이메일 입니다.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+        } catch (MemberNicknameAlreadyExistsException e) {
+            message = "중복된 닉네임 입니다.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+        }
+        boolean signUpCheck = signService.signUp(req);
+        if(!signUpCheck) {
+            message = "회원 가입 실패";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+        }
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    private void validateSingUpInfo(SignUpRequest req) {
+        if(signService.existsByEmail(req.getEmail())) {
+            throw new MemberEmailAlreadyExistsException(req.getEmail());
+        }
+        if(signService.existsByNickname(req.getNickname()))
+            throw new MemberNicknameAlreadyExistsException(req.getNickname());
+    }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleValidationException(MethodArgumentNotValidException ex) {
         String message = "입력값이 올바르지 않습니다.";
